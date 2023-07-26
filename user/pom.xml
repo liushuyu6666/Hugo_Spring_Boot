@@ -15,7 +15,7 @@
 
     <dependencies>
 
-<!--&lt;!&ndash;                Switch to Jetty&ndash;&gt;-->
+<!--                Switch to Jetty-->
 <!--                <dependency>-->
 <!--                    <groupId>org.springboot</groupId>-->
 <!--                    <artifactId>springboot</artifactId>-->
