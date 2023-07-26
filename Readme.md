@@ -136,6 +136,6 @@ This is a conditional bean that is created only when a specified condition evalu
         </dependency>
     ```
 
-(<< Prev Branch)[https://github.com/liushuyu6666/Hugo_Spring_Boot/blob/master/Readme.md]
+[<< Prev Branch](https://github.com/liushuyu6666/Hugo_Spring_Boot/blob/master/Readme.md)
 
-(>> Next Branch)[https://github.com/liushuyu6666/Hugo_Spring_Boot/blob/p2-conditional-annotation/Readme.md]
+[>> Next Branch](https://github.com/liushuyu6666/Hugo_Spring_Boot/blob/p2-conditional-annotation/Readme.md)
