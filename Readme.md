@@ -157,19 +157,19 @@ In the `ShuyuCondition` class, we implement the `Condition` interface, which req
     **Note**: It is impossible to directly get all `ClassLoader` instances from the `ConditionContext`, as it doesn't expose a method to retrieve all class loaders. However, you can indirectly access the class loaders of specific packages or loaded classes by their class name using `Objects.requireNonNull(context.getClassLoader()).loadClass(className);`
 
 2. `AnnotatedTypeMetadata`: With this parameter, we can access all direct annotations present on the annotated element. In the context of `ShuyuCondition`, the direct annotations are `org.springframework.context.annotation.Bean`, `org.springboot.ShuyuConditionalOnClass`, and `org.springframework.context.annotation.Conditional`. To verify their presence, we can utilize the following code snippet within the `matches` method of `springboot/src/main/java/org/springboot/ShuyuCondition.java`:
-```java
-    public class ShuyuCondition implements Condition {
-        @Override
-        public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-            MergedAnnotations annotations = metadata.getAnnotations();
-            for (MergedAnnotation<Annotation> annotation : annotations) {
-                System.out.println("Annotation: " + annotation.getType());
+    ```java
+        public class ShuyuCondition implements Condition {
+            @Override
+            public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+                MergedAnnotations annotations = metadata.getAnnotations();
+                for (MergedAnnotation<Annotation> annotation : annotations) {
+                    System.out.println("Annotation: " + annotation.getType());
+                }
+                
+                // other codes
             }
-            
-            // other codes
         }
-    }
-```
+    ```
 ## Process in the `@ShuyuConditionalOnClass` annotation
 1. Upon entering the `WebServerAutoConfiguration` class, our custom `@ShuyuConditionalOnClass` annotation is used to determine the beans that should be created based on certain conditions.
 2. As `@ShuyuConditionalOnClass` is composed of three annotations, each of them is sequentially processed. However, our primary focus lies on the `@Conditional` annotation.
