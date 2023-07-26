@@ -64,20 +64,20 @@ In the `run()` function:
 2. Register the `MyApplication` class as a configuration class within the `applicationContext`.
 3. During the refresh process, the Spring container scans and creates beans defined in the `MyApplication` class. This process involves the following steps:
     1. Identify functions annotated with `@Bean` within the `MyApplication` class and include them as beans in the container. For example
-    ```java
-    import java.beans.BeanProperty;public class MyApplication {
-        // ... main ...
-   
-        @Bean
-        public void beanComponents() {
-            // This function will be scanned as a bean
-        }    
-    }
-    ```
+        ```java
+            import java.beans.BeanProperty;public class MyApplication {
+            // ... main ...
+
+                @Bean
+                public void beanComponents() {
+                // This function will be scanned as a bean
+                }    
+            }
+        ```
     2. Parse the `@ShuyuSpringBootApplication` annotation, which is used to annotate the configuration class.
-        1. Extract configuration information from the `@ComponentScan` annotations within the `ShuyuSpringBootApplication` interface.
-        2. If no specific scan path is provided, the Spring container will scan the package where `MyApplication` is located, which is `com.liushuyu.user`.
-        3. The container scans and registers bean components, such as `UserController`, found within the `com.liushuyu.user` package.
+       1. Extract configuration information from the `@ComponentScan` annotations within the `ShuyuSpringBootApplication` interface.
+       2. If no specific scan path is provided, the Spring container will scan the package where `MyApplication` is located, which is `com.liushuyu.user`.
+       3. The container scans and registers bean components, such as `UserController`, found within the `com.liushuyu.user` package.
     3. After this process, bean components defined in both the `MyApplication` class and the `com.liushuyu.user` package will be scanned and created.
 4. Using `getWebServer` employs polymorphism to obtain the user-selected web server. Then the chosen web server is launched with the Spring container. This enables the application to be deployed and accessible through the web server.
 
@@ -141,22 +141,21 @@ similar to our `@ShuyuConditionalOnClass` annotation, takes a class type as its 
 
 ## `ShuyuCondition` class and `Condition` interface
 In the `ShuyuCondition` class, we implement the `Condition` interface, which requires us to define the `matches` method with two parameters: `ConditionContext` and `AnnotatedTypeMetadata`.
-1. `ConditionContext`: This parameter gives us access to essential Spring components, such as the Spring Environment and BeanFactory, enabling us to gather relevant information about the application context during runtime.
-   For example, we can get BeanFactory and list all beans:
-```java
-    ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
-    assert beanFactory != null;
-    String[] beanNames = beanFactory.getBeanDefinitionNames();
-
-    for (String beanName : beanNames) {
-        Class<?> beanClass = beanFactory.getType(beanName);
-        if (beanClass != null) {
-            System.out.println(beanClass.getName());
+1. `ConditionContext`: This parameter gives us access to essential Spring components, such as the Spring Environment and BeanFactory, enabling us to gather relevant information about the application context during runtime. For example, we can get BeanFactory and list all beans:The `ConditionContext` provides access to the class loader, which is responsible for dynamically loading classes and resources into the Java Virtual Machine (JVM) at runtime. In JVM, class loaders follow a hierarchical structure, establishing a parent-child relationship. Each class in Java is associated with its own unique class loader.
+    ```java
+        ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
+        assert beanFactory != null;
+        String[] beanNames = beanFactory.getBeanDefinitionNames();
+    
+        for (String beanName : beanNames) {
+            Class<?> beanClass = beanFactory.getType(beanName);
+            if (beanClass != null) {
+                System.out.println(beanClass.getName());
+            }
         }
-    }
-```
-The `ConditionContext` provides access to the class loader, which is responsible for dynamically loading classes and resources into the Java Virtual Machine (JVM) at runtime. In JVM, class loaders follow a hierarchical structure, establishing a parent-child relationship. Each class in Java is associated with its own unique class loader.
-**Note**: It is impossible to directly get all `ClassLoader` instances from the `ConditionContext`, as it doesn't expose a method to retrieve all class loaders. However, you can indirectly access the class loaders of specific packages or loaded classes by their class name using `Objects.requireNonNull(context.getClassLoader()).loadClass(className);`
+    ```
+    **Note**: It is impossible to directly get all `ClassLoader` instances from the `ConditionContext`, as it doesn't expose a method to retrieve all class loaders. However, you can indirectly access the class loaders of specific packages or loaded classes by their class name using `Objects.requireNonNull(context.getClassLoader()).loadClass(className);`
+
 2. `AnnotatedTypeMetadata`: With this parameter, we can access all direct annotations present on the annotated element. In the context of `ShuyuCondition`, the direct annotations are `org.springframework.context.annotation.Bean`, `org.springboot.ShuyuConditionalOnClass`, and `org.springframework.context.annotation.Conditional`. To verify their presence, we can utilize the following code snippet within the `matches` method of `springboot/src/main/java/org/springboot/ShuyuCondition.java`:
 ```java
     public class ShuyuCondition implements Condition {
@@ -238,37 +237,37 @@ The `ConditionContext` provides access to the class loader, which is responsible
         ```
        The annotated type is `UserController`.
     2. When `@RequestMapping` is applied at the method level,
-         ```java
-             @Controller
-             @RequestMapping("/users")
-             public class UserController {
+        ```java
+            @Controller
+            @RequestMapping("/users")
+            public class UserController {
  
-                 @RequestMapping("/list")
-                 public String userList() {
-                     // ...
-                 }
+                @RequestMapping("/list")
+                public String userList() {
+                    // ...
+                }
  
-                 @RequestMapping("/create")
-                 public String createUser() {
-                     // ...
-                 }
-             }
-         ```
-       In this case, the "annotated type" refers to the `userList()` and `createUser()` methods, which are annotated with `@RequestMapping` at the method level.
+                @RequestMapping("/create")
+                public String createUser() {
+                    // ...
+                }
+            }
+        ```
+        In this case, the "annotated type" refers to the `userList()` and `createUser()` methods, which are annotated with `@RequestMapping` at the method level.
 3. Input parameters: In the annotation definition, we use methods to represent input parameter. For example:
     ```java
-    @Conditional(ShuyuCondition.class)
-    public @interface ShuyuConditionalOnClass {
-        String value();
+        @Conditional(ShuyuCondition.class)
+        public @interface ShuyuConditionalOnClass {
+            String value();
+        }
+    ```
+    Here the `ShuyuConditionalOnClass` will take a string variable as the input parameter. So, when we are using it we need to use it in this way:
+    ```java
+    @ShuyuConditionalOnClass("org.apache.catalina.startup.Tomcat")
+    public class MyConditionalBean {
+        // Bean definition here
     }
     ```
-Here the `ShuyuConditionalOnClass` will take a string variable as the input parameter. So, when we are using it we need to use it in this way:
-```java
-@ShuyuConditionalOnClass("org.apache.catalina.startup.Tomcat")
-public class MyConditionalBean {
-// Bean definition here
-}
-```
 4. When an annotation comprises multiple sub-annotations, it can be considered a combination of these sub-annotations. This implies that when the program encounters such an annotation, it will internally process and execute each of the sub-annotations contained within it.
 
 
