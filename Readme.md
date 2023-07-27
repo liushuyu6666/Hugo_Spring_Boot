@@ -15,10 +15,12 @@
   - [`@Conditional` annotation](#conditional-annotation)
   - [`ShuyuCondition` class and `Condition` interface](#shuyucondition-class-and-condition-interface)
   - [Process in the `@ShuyuConditionalOnClass` annotation](#process-in-the-shuyuconditionalonclass-annotation)
+- [`ShuyuEnableAutoConfiguration` annotation](#shuyuenableautoconfiguration-annotation)
 - [Rules](#rules)
   - [Beans Generation](#beans-generation)
   - [Dependencies](#dependencies)
-  - [Annotations](#annotations)
+
+
 
 
 
@@ -31,6 +33,7 @@ This is a tutorial on handwritten Spring Boot source code, designed to simulate 
 1. master: a simple version of Spring Boot powered by Tomcat. it runs on `localhost:8081` and the API is `localhost:8081:test`.
 2. p1-multiple-webservers: Use `WebServerAutoConfiguration` to seamlessly switch between Tomcat and Jetty.
 3. p2-conditional-annotation: Use `@ShuyuConditionalOnClass` to make code reusable.
+4. p3-import-multiple-auto-config-class: Use `@ShuyuEnableAutoConfiguration` to enable auto configuration. For detailed information, please refer to the dedicated file `AutoConfig.md`. 
 
 # HTTP Request handling Process
 ## The whole process from a higher view
@@ -176,6 +179,14 @@ In the `ShuyuCondition` class, we implement the `Condition` interface, which req
 3. The `@Conditional` annotation triggers the execution of the `ShuyuCondition.matches()` method, which returns a boolean value. This boolean value plays a pivotal role in determining the creation of specific beans.
 
 
+
+
+# `ShuyuEnableAutoConfiguration` annotation
+This is a custom class designed to facilitate the import of multiple auto-configuration classes. Instead of individually using @Import(WebServerAutoConfiguration.class) for each specific configuration class, which can be impractical in projects with numerous auto-config classes from both the Spring Boot framework and third-party packages, we employ the ShuyuAutoConfigurationImportSelector class. This specialized class efficiently locates and imports all relevant auto-configuration classes. The current section encapsulates the entire auto-configuration mechanism. For detailed information, please refer to the dedicated file `AutoConfig.md`.
+
+
+
+
 # Rules
 ## Beans Generation
 1. Methods that annotated by `@Beans` in the `MyApplication` class.
@@ -224,53 +235,7 @@ In the `ShuyuCondition` class, we implement the `Condition` interface, which req
         </dependency>
     ```
 
-## Annotations
-1. Annotation's name: the annotation `@RequestMapping` has the name `org.springframework.web.bind.annotation.RequestMapping`.
-2. Annotated type: The "annotated type" of `@RequestMapping` depends on where the annotation is used.
-    1. When `@RequestMapping` is applied at the class level,
-        ```java
-            @Controller
-            @RequestMapping("/users")
-            public class UserController {
-                // ...
-            }
-        ```
-       The annotated type is `UserController`.
-    2. When `@RequestMapping` is applied at the method level,
-        ```java
-            @Controller
-            @RequestMapping("/users")
-            public class UserController {
- 
-                @RequestMapping("/list")
-                public String userList() {
-                    // ...
-                }
- 
-                @RequestMapping("/create")
-                public String createUser() {
-                    // ...
-                }
-            }
-        ```
-        In this case, the "annotated type" refers to the `userList()` and `createUser()` methods, which are annotated with `@RequestMapping` at the method level.
-3. Input parameters: In the annotation definition, we use methods to represent input parameter. For example:
-    ```java
-        @Conditional(ShuyuCondition.class)
-        public @interface ShuyuConditionalOnClass {
-            String value();
-        }
-    ```
-    Here the `ShuyuConditionalOnClass` will take a string variable as the input parameter. So, when we are using it we need to use it in this way:
-    ```java
-    @ShuyuConditionalOnClass("org.apache.catalina.startup.Tomcat")
-    public class MyConditionalBean {
-        // Bean definition here
-    }
-    ```
-4. When an annotation comprises multiple sub-annotations, it can be considered a combination of these sub-annotations. This implies that when the program encounters such an annotation, it will internally process and execute each of the sub-annotations contained within it.
 
-
-[<< Prev Branch](https://github.com/liushuyu6666/Hugo_Spring_Boot/blob/p1-multiple-webservers/Readme.md)
+[<< Prev Branch](https://github.com/liushuyu6666/Hugo_Spring_Boot/blob/p2-conditional-annotation/Readme.md)
 
 [>> Next Branch](https://github.com/liushuyu6666/Hugo_Spring_Boot/blob/p3-import-multiple-auto-config-class/Readme.md)
