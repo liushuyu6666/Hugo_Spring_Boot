@@ -182,7 +182,7 @@ In the `ShuyuCondition` class, we implement the `Condition` interface, which req
 
 
 # `ShuyuEnableAutoConfiguration` annotation
-This is a custom class designed to facilitate the import of multiple auto-configuration classes. Instead of individually using @Import(WebServerAutoConfiguration.class) for each specific configuration class, which can be impractical in projects with numerous auto-config classes from both the Spring Boot framework and third-party packages, we employ the ShuyuAutoConfigurationImportSelector class. This specialized class efficiently locates and imports all relevant auto-configuration classes. The current section encapsulates the entire auto-configuration mechanism. For detailed information, please refer to the dedicated file `AutoConfig.md`.
+This is a custom class designed to facilitate the import of multiple auto-config classes. Instead of individually using `@Import(WebServerAutoConfiguration.class)` for each specific configuration class, which can be impractical in projects with numerous auto-config classes from both the Spring Boot framework and third-party packages, we employ the `ShuyuEnableAutoConfiguration` class. This specialized class efficiently locates and imports all relevant auto-config classes. The current section encapsulates the entire auto-config mechanism. For detailed information, please refer to the dedicated file [AutoConfig.md](https://github.com/liushuyu6666/Hugo_Spring_Boot/blob/p3-import-multiple-auto-config-class/AutoConfig.md).
 
 
 
