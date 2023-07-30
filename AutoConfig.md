@@ -1,3 +1,10 @@
+- [`ShuyuAutoConfigurationPackages` class](#shuyuautoconfigurationpackages-class)
+  - [`register` method](#register-method)
+  - [`Registrar` sub class](#registrar-sub-class)
+  - [`PackageImports` sub class](#packageimports-sub-class)
+  - [`BasePackagesBeanDefinition` sub class](#basepackagesbeandefinition-sub-class)
+
+
 # `ShuyuAutoConfigurationPackages` class
 
 ## `register` method
