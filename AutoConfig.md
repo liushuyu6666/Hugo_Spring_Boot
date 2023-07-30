@@ -6,12 +6,12 @@
 
 
 # `ShuyuAutoConfigurationPackages` class
+This class will register `ShuyuAutoConfigurationPackages` with `com.liushuyu.user` package as a bean into the Bean Definition Registry.
 
 ## `register` method
 1. It checks whether the bean definition registry contains an entry for the `org.springboot.autoConfig.ShuyuAutoConfigurationPackages` class.
 2. If the entry exists, it updates the package names associated with the `org.springboot.autoConfig.ShuyuAutoConfigurationPackages` bean.
 3. If the entry does not exist, it creates a new bean definition for the `org.springboot.autoConfig.ShuyuAutoConfigurationPackages` class, specifying the package names, and registers this bean definition into the bean definition registry.
-
 
 
 ## `Registrar` sub class
