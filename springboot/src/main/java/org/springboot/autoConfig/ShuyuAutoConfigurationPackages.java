@@ -7,7 +7,6 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
-import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
@@ -38,6 +37,10 @@ public abstract class ShuyuAutoConfigurationPackages {
             PackageImports packageImports = new PackageImports(metadata);
             String[] packageNames = packageImports.getPackageNames().toArray(new String[0]);
             register(registry, packageNames);
+        }
+
+        public Set<Object> determineImports(AnnotationMetadata metadata) {
+            return Collections.singleton(new PackageImports(metadata));
         }
 
     }

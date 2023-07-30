@@ -9,6 +9,7 @@
 
 ## `Registrar` sub class
 1. `registerBeanDefinitions` method: It retrieves the underlying class name (e.g., `com.liushuyu.user` in our project) and then register the `org.springboot.autoConfig.ShuyuAutoConfigurationPackages` bean definition with this package into the Bean Definition Registry.
+2. `determineImports` method: Return a `PackageImports` object.
 
 
 
